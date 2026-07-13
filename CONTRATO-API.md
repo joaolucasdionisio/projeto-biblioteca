@@ -26,7 +26,10 @@
 | 3 | `GET /biblioteca?id=9` | 200 — lista vazia `[]` |
 | 4 | `POST /login` com `admin` / `biblioteca123` | 200 — sucesso |
 | 5 | `POST /login` com senha errada | 401 — erro |
-| 6 | `POST /retirada` `{id: 3, aluno: "NomeDoUsuário"}` | 201 — Livro é retirado e valiação confirmada |
+| 6 | `POST /retirada` `{id: 3, aluno: "NomeDoUsuário"}` | 201 — Livro é retirado e validação confirmada |
 | 7 | `POST /retirada` sem o campo `aluno` | 400 — erro de validação |
 | 8 | `POST /retirada` `{id: 99, ...}` | 404 — livro não existe |
 | 9 | `POST /retirada` `logado = false` | 401 — Acesso não autorizado |
+| 10 | `POST /devolucao` `logado = false` | 401 — Acesso não autorizado |
+| 11 | `POST /devolucao` sem o campo `aluno` | 400 — erro de validação |
+| 12 | `POST /devolucao` `{id: 99, ...}` | 404 — livro não existe |

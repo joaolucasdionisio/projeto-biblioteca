@@ -13,7 +13,7 @@ app.get('/biblioteca', (req, res) => {
   res.status(200).json(livros);
 });
 
-app.get('/biblioteca/:id', (req, res) => {
+app.get('/biblioteca/autor/:id', (req, res) => {
   let livro = null;
   for (let i = 0; i < livros.length; i++) {
     if (livros[i].id === parseInt(req.params.id)) {
@@ -26,7 +26,7 @@ app.get('/biblioteca/:id', (req, res) => {
   res.status(200).json(livro);
 });
 
-app.get('/biblioteca/:autor', (req, res) => {
+app.get('/biblioteca/autor/:autor', (req, res) => {
   let livrosAutor = null;
   for (let i = 0; i < livros.length; i++) {
     if (livros[i].autor === req.params.autor) {
@@ -83,6 +83,37 @@ app.post('/retirada', (req, res) => {
     res.status(201).json({ mensagem: 'Retirada realizada com sucesso!' });
   }
 }
+});
+
+app.post('/devolucao', (req, res) => {
+  const id = req.body.id;
+  const alunoResponsavel = req.body.pessoaResponsavel;
+
+  if (!logado) {
+    return res.status(401).json({ erro: 'Acesso não autorizado.' });
+  }
+
+  if (!id || !alunoResponsavel) {
+    return res.status(400).json({ erro: 'Envie id e aluno.' });
+  }
+
+  if (alunoResponsavel === '') {
+    return res.status(400).json({ erro: 'O campo pessoaResponsavel não pode estar vazio.' });
+  }
+
+  let idEncontrado = false;
+  for (let i = 0; i < livros.length; i++) {
+    if (livros[i].id === parseInt(id) && livros[i].pessoaResponsavel === alunoResponsavel) {
+      livros[i].pessoaResponsavel = '';
+      idEncontrado = true;
+    }
+  }
+
+  if (!idEncontrado) {
+    return res.status(404).json({ erro: 'Livro não encontrado.' });
+  }
+
+  res.status(200).json({ mensagem: 'Devolução realizada com sucesso!' });
 });
 
 app.listen(3000, () => {
