@@ -7,7 +7,16 @@ let logado = false;
 const usuario = 'admin';
 const senha = 'livraria123';
 
-let livros = [{ id: 1, pessoaResponsavel: '', titulo: 'O Senhor dos Anéis', autor: 'J.R.R. Tolkien' }];
+let livros = [
+  { id: 1, pessoaResponsavel: '', titulo: 'O Senhor dos Anéis', autor: 'J.R.R. Tolkien' },
+  { id: 2, pessoaResponsavel: '', titulo: '1984', autor: 'George Orwell' },
+  { id: 3, pessoaResponsavel: '', titulo: 'Dom Casmurro', autor: 'Machado de Assis' },
+  { id: 4, pessoaResponsavel: '', titulo: 'O Pequeno Príncipe', autor: 'Antoine de Saint-Exupéry' },
+  { id: 5, pessoaResponsavel: '', titulo: 'Crime e Castigo', autor: 'Fiódor Dostoiévski' },
+  { id: 6, pessoaResponsavel: '', titulo: 'O Hobbit', autor: 'J.R.R. Tolkien' },
+  { id: 7, pessoaResponsavel: '', titulo: 'A Menina que Roubava Livros', autor: 'Markus Zusak' },
+  { id: 8, pessoaResponsavel: '', titulo: 'Cem Anos de Solidão', autor: 'Gabriel García Márquez' }
+];
 
 app.get('/biblioteca', (req, res) => {
   res.status(200).json(livros);
