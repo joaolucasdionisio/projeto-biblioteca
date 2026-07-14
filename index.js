@@ -1,7 +1,13 @@
-const express = require('express');
+const express = require("express");
+const path = require("path");
+
 const app = express();
+
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 let logado = false;
 
 const usuario = 'admin';
@@ -22,7 +28,7 @@ app.get('/biblioteca', (req, res) => {
   res.status(200).json(livros);
 });
 
-app.get('/biblioteca/autor/:id', (req, res) => {
+app.get('/biblioteca/id/:id', (req, res) => {
   let livro = null;
   for (let i = 0; i < livros.length; i++) {
     if (livros[i].id === parseInt(req.params.id)) {

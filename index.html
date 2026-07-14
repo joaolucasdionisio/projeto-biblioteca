@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#eee;
+}
+
+.container{
+    width:700px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    padding:15px;
+    margin:10px 0;
+    border-radius:8px;
+}
+
+button{
+    margin-top:10px;
+    padding:8px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Biblioteca</h1>
+
+<h2>Login</h2>
+
+<input id="usuario" placeholder="Usuário">
+<input id="senha" type="password" placeholder="Senha">
+
+<button onclick="login()">Entrar</button>
+
+<hr>
+
+<h2>Livros</h2>
+
+<div id="livros"></div>
+
+</div>
+
+<script>
+
+const API="http://localhost:3000";
+
+async function login(){
+
+    const usuario=document.getElementById("usuario").value;
+    const senha=document.getElementById("senha").value;
+
+    const resposta=await fetch(API+"/login",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            usuario,
+            senha
+        })
+
+    });
+
+    const dados=await resposta.json();
+
+    alert(dados.mensagem || dados.erro);
+
+}
+
+async function carregarLivros(){
+
+    const resposta=await fetch(API+"/biblioteca");
+
+    const livros=await resposta.json();
+
+    const div=document.getElementById("livros");
+
+    div.innerHTML="";
+
+    livros.forEach(livro=>{
+
+        div.innerHTML+=`
+        <div class="card">
+            <h3>${livro.titulo}</h3>
+            <p>Autor: ${livro.autor}</p>
+            <p>Status: ${livro.pessoaResponsavel=='' ? 'Disponível' : 'Emprestado para '+livro.pessoaResponsavel}</p>
+
+            <button onclick="retirar(${livro.id})">Retirar</button>
+
+            <button onclick="devolver(${livro.id})">Devolver</button>
+
+        </div>
+        `;
+
+    });
+
+}
+
+async function retirar(id){
+
+    let nome=prompt("Nome do aluno:");
+
+    if(nome==null) return;
+
+    const resposta=await fetch(API+"/retirada",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            id:id,
+            pessoaResponsavel:nome
+
+        })
+
+    });
+
+    const dados=await resposta.json();
+
+    alert(dados.mensagem || dados.erro);
+
+    carregarLivros();
+
+}
+
+async function devolver(id){
+
+    let nome=prompt("Nome do aluno:");
+
+    if(nome==null) return;
+
+    const resposta=await fetch(API+"/devolucao",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            id:id,
+            pessoaResponsavel:nome
+
+        })
+
+    });
+
+    const dados=await resposta.json();
+
+    alert(dados.mensagem || dados.erro);
+
+    carregarLivros();
+
+}
+
+carregarLivros();
+
+</script>
+
+</body>
+</html>
